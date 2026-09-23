@@ -1,8 +1,18 @@
 diff --git a/README.md b/README.md
-index 898f959e..9e0ddd70 100644
+index 898f959e..6382e46f 100644
 --- a/README.md
 +++ b/README.md
-@@ -73,10 +73,11 @@ Here are some specific feature highlights of Grist (🇫🇷 marks heavy French
+@@ -2,6 +2,9 @@
+ 
+ Grist is a modern relational spreadsheet. It combines the flexibility of a spreadsheet with the robustness of a database.
+ 
++> [!NOTE]
++> This fork of `grist-core` preserves SSO support.
++
+ * `grist-core` (this repo – also known as Grist Community edition) has what you need to run a powerful server for hosting spreadsheets.
+ * [`grist-desktop`](https://github.com/gristlabs/grist-desktop) is a Linux/macOS/Windows desktop app for viewing and editing spreadsheets stored locally.
+ * [`grist-static`](https://github.com/gristlabs/grist-static) is a fully in-browser build of Grist for displaying spreadsheets on a website without back-end support.
+@@ -73,10 +76,11 @@ Here are some specific feature highlights of Grist (🇫🇷 marks heavy French
      - [SCIM](https://support.getgrist.com/install/scim/) for standard user and group provisioning (🇫🇷).
    * [Many templates](https://templates.getgrist.com/) to get you started, from investment research to organizing treasure hunts.
    * Access control options.
@@ -15,7 +25,7 @@ index 898f959e..9e0ddd70 100644
    * Collaboration.
      - [Comments](https://support.getgrist.com/sharing/#comments) on cells, with threaded replies and @-mentions.
      - See who else is viewing a document in real time.
-@@ -106,7 +107,7 @@ Here is a list of features available in the full edition of Grist that are not i
+@@ -106,7 +110,7 @@ Here is a list of features available in the full edition of Grist that are not i
  
    * [GristConnect](https://support.getgrist.com/install/grist-connect/) (2022)
      - Any site that has plugins for letting Discourse use its logins (such as WordPress) can also let Grist use its logins.
@@ -24,7 +34,7 @@ index 898f959e..9e0ddd70 100644
    * [Azure back-end for document storage](https://support.getgrist.com/install/cloud-storage/#azure) (2022)
      - With `grist-core` you can store document versions in anything S3-compatible, which covers a lot of services, but not Azure specifically. The Azure back-end fills that gap.
      - Unless you are a Microsoft shop you probably don't care about this.
-@@ -136,7 +137,6 @@ Here is a list of features available in the full edition of Grist that are not i
+@@ -136,7 +140,6 @@ Here is a list of features available in the full edition of Grist that are not i
    * [MCP server](https://support.getgrist.com/mcp/) (2026)
      - A built-in [Model Context Protocol](https://modelcontextprotocol.io/) endpoint that lets AI clients such as Claude or ChatGPT read and edit Grist documents over JSON-RPC. Enabled with `GRIST_MCP_ENABLED` (see [environment variables](#environment-variables)).
      - With `grist-core` you can still use one of the many community MCP servers that talks to Grist through its [REST API](https://support.getgrist.com/api/). The built-in server saves you that work.
@@ -32,7 +42,7 @@ index 898f959e..9e0ddd70 100644
  
  ## Using Grist
  
-@@ -339,7 +339,7 @@ in a limited anonymous mode.
+@@ -339,7 +342,7 @@ in a limited anonymous mode.
  
  The friendliest way to get sign-in set up is the Quick setup page that
  appears on a fresh install. It lets you pick an admin email and an
@@ -41,7 +51,7 @@ index 898f959e..9e0ddd70 100644
  [First-run setup](https://support.getgrist.com/install/first-run-setup/)
  for the full walkthrough. You can revisit those same settings later
  from the [Admin Panel](#the-admin-panel).
-@@ -356,13 +356,8 @@ You can change your name in `Profile Settings` in
+@@ -356,13 +359,8 @@ You can change your name in `Profile Settings` in
  the [User Menu](https://support.getgrist.com/glossary/#user-menu).
  
  For multi-user operation, or if you wish to access Grist across the
@@ -57,7 +67,7 @@ index 898f959e..9e0ddd70 100644
  Grist has been tested with [Authentik](https://goauthentik.io/), [Auth0](https://auth0.com/),
  and Google/Microsoft sign-ins via [Dex](https://dexidp.io/).
  
-@@ -519,8 +514,9 @@ Grist can be configured in many ways. Here are the main environment variables it
+@@ -519,8 +517,9 @@ Grist can be configured in many ways. Here are the main environment variables it
  | GRIST_SNAPSHOT_KEEP | optional. Number of recent snapshots to retain unconditionally for a document, regardless of when they were made |
  | GRIST_PROMCLIENT_PORT | optional. If set, serve the Prometheus metrics on the specified port number. ⚠️ Be sure to use a port which is not publicly exposed ⚠️. |
  | GRIST_ENABLE_SCIM | optional. If set, enable the [SCIM API Endpoint](https://support.getgrist.com/install/scim/) (experimental) |
