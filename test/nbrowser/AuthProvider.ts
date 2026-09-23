@@ -63,15 +63,12 @@ describe("AuthProvider", function() {
     assert.isAtLeast(providerRows.length, 1);
 
     // No provider carries a status badge yet. getgrist.com carries its
-    // "Recommended" chip while nothing is configured, and the SSO providers
-    // carry the "Requires activation key" chip.
+    // "Recommended" chip while nothing is configured.
     for (const row of providerRows) {
       const badges = await row.findAll(".test-setup-card-badge", e => e.getText());
       const text = await row.getText();
       if (text.includes("getgrist")) {
         assert.deepEqual(badges, ["Recommended"]);
-      } else if (/OIDC|SAML/.test(text)) {
-        assert.deepEqual(badges, ["Requires activation key"]);
       } else {
         assert.lengthOf(badges, 0);
       }
@@ -79,9 +76,9 @@ describe("AuthProvider", function() {
   });
 
   it("unconfigured providers should open their configure modal on click", async function() {
-    // OIDC and SAML require an activation key (their click opens the
-    // key-request modal instead), so exercise the configure modal on the others.
-    for (const name of [/Sign in with getgrist/, /Forwarded headers/]) {
+    // In this fork OIDC and SAML are available without an activation key,
+    // so every unconfigured provider opens its configure modal on click.
+    for (const name of [/Sign in with getgrist/, /OIDC/, /Forwarded headers/]) {
       const row = await driver.findContent(".test-admin-auth-provider-row", name);
       await row.click();
 
@@ -100,14 +97,13 @@ describe("AuthProvider", function() {
     }
   });
 
-  it("OIDC and SAML should open the activation-key modal on click", async function() {
-    const oidcRow = await driver.findContent(".test-admin-auth-provider-row", /OIDC/);
-    await oidcRow.click();
-    await driver.findWait(".test-admin-auth-key-modal", 2000);
-    // "I have a key" is a plain link to where the key is entered (Admin Panel > Edition).
-    const goEdition = await driver.find(".test-admin-auth-key-modal-go-edition");
-    assert.match(await goEdition.getAttribute("href") ?? "", /\/admin#edition$/);
-    await driver.find(".test-admin-auth-key-modal-close").click();
+  it("SAML should open its configure modal on click", async function() {
+    // SSO is available without an activation key in this fork, so clicking
+    // the (unconfigured) SAML card opens the configuration modal.
+    const samlRow = await driver.findContent(".test-admin-auth-provider-row", /SAML/);
+    await samlRow.click();
+    await driver.findWait(".test-admin-auth-modal-header", 2000);
+    await driver.find(".test-admin-auth-modal-close").click();
     await gu.checkForErrors();
   });
 
@@ -137,7 +133,7 @@ describe("AuthProvider", function() {
     assert.equal(await itemValue("authentication"), "auth error");
 
     // Also check other 2 providers we know about.
-    assert.deepEqual(await badges("SAML"), ["Requires activation key"]);
+    assert.deepEqual(await badges("SAML"), []);
     assert.deepEqual(await badges("Forwarded headers"), []);
   });
 
@@ -163,7 +159,7 @@ describe("AuthProvider", function() {
     assert.includeMembers(await heroBadges(), ["Error"]);
 
     // Other providers should remain unchanged.
-    assert.deepEqual(await badges("SAML"), ["Requires activation key"]);
+    assert.deepEqual(await badges("SAML"), []);
     assert.deepEqual(await badges("Forwarded headers"), []);
   });
 
@@ -186,7 +182,7 @@ describe("AuthProvider", function() {
     }, 1000);
 
     // SAML should still be unconfigured
-    assert.deepEqual(await badges("SAML"), ["Requires activation key"]);
+    assert.deepEqual(await badges("SAML"), []);
   });
 
   it("should switch to ForwardAuth provider", async function() {

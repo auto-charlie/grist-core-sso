@@ -431,8 +431,7 @@ describe("QuickSetupAuth", function() {
     let oidc: Awaited<ReturnType<typeof startMockOIDCIssuer>>;
 
     // A valid base64 getgrist.com configuration key against the mock OIDC issuer.
-    // getgrist.com (unlike OIDC/SAML) does not require an activation key, so the
-    // wizard can stage it as the active method in a community install.
+    // getgrist.com stages cleanly in a community install via the wizard.
     function buildGetGristKey() {
       return Buffer.from(JSON.stringify({
         oidcClientId: "test-client-id",

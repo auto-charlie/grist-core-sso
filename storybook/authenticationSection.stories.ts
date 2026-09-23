@@ -53,7 +53,7 @@ export const HeroCardStates = () => cssGrid(
     ]),
   ),
   cssColumn(
-    cssLabel("Active — OIDC (green, missing activation key)"),
+    cssLabel("Active — OIDC (green)"),
     buildAuthSectionPreview([
       oidc({ isConfigured: true, isActive: true }),
       saml(),
@@ -93,7 +93,7 @@ export const HeroCardStates = () => cssGrid(
  */
 export const ProviderCardStates = () => cssGrid(
   cssColumn(
-    cssLabel("Unconfigured (requires activation key)"),
+    cssLabel("Unconfigured (selectable)"),
     buildAuthSectionPreview([
       oidc(),
     ]),
