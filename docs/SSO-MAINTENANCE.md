@@ -70,8 +70,8 @@ SSO wird weiterhin rein konfiguriert, nicht per UI-Lizenz:
    git log --oneline vVorher..vNeu -i --grep='sso\|oidc\|saml'
    git diff vVorher..vNeu --stat -- app/server/lib/oidc/ app/server/lib/SamlConfig.ts app/server/lib/OIDCConfig.ts app/server/lib/coreLogins.ts app/client/ui/AuthenticationSection.ts
    ```
-3. Auf `sso-safe`: `git merge upstream/vNeu` (Fork bleibt immer auf dem
-   Upstream-Stand + unseren Patches).
+3. Auf `main`: `git merge upstream/vNeu` (der Main-Branch dieses Forks trägt
+   immer Upstream-Stand + unsere Patches).
 4. **Nur bei Konflikten/SSO-Änderungen:** Patch-Sets 1–3 unten neu anwenden
    (bzw. per `git rebase`/`cherry-pick` der Patches).
 5. **Pflicht-Verifikation** (siehe unten) vor jedem Push.
