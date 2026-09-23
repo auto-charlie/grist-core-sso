@@ -1,0 +1,21 @@
+Welcome to Grist.
+In quiet mode, see http://localhost:9502 to use.
+For full logs, re-run with DEBUG=1
+2026-09-23 10:31:10.012 - info: RestartShell: starting
+2026-09-23 10:31:10.017 - info: RestartShell: listening on port 9502
+2026-09-23 10:31:10.018 - info: RestartShell: spawning child
+Welcome to Grist.
+In quiet mode, see http://localhost:9502 to use.
+For full logs, re-run with DEBUG=1
+┌────────────────────────────────────────┐
+│                                        │
+│   BOOT KEY: cffa442bd33d6f292f37165a   │
+│                                        │
+│   Use this key at /boot to sign in.    │
+│                                        │
+└────────────────────────────────────────┘
+2026-09-23 10:31:11.120 - info: RestartShell: child ready
+2026-09-23 10:33:09.490 - info: Server grist[150523] got signal SIGTERM; cleaning up (2 handlers)
+2026-09-23 10:33:09.491 - info: UploadSet: cleaning up all 0 uploads in set
+2026-09-23 10:33:09.505 - info: RestartShell: child exited code=143 signal=null
+2026-09-23 10:33:09.505 - info: Server grist[150523] exiting on SIGTERM
