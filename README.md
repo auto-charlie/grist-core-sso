@@ -2,6 +2,9 @@
 
 Grist is a modern relational spreadsheet. It combines the flexibility of a spreadsheet with the robustness of a database.
 
+> [!NOTE]
+> This fork of `grist-core` preserves SSO support.
+
 * `grist-core` (this repo – also known as Grist Community edition) has what you need to run a powerful server for hosting spreadsheets.
 * [`grist-desktop`](https://github.com/gristlabs/grist-desktop) is a Linux/macOS/Windows desktop app for viewing and editing spreadsheets stored locally.
 * [`grist-static`](https://github.com/gristlabs/grist-static) is a fully in-browser build of Grist for displaying spreadsheets on a website without back-end support.
