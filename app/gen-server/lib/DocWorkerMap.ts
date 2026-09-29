@@ -87,6 +87,10 @@ class DummyDocWorkerMap implements IDocWorkerMap {
     throw new Error("getRegisteredWorkers is not answerable without redis");
   }
 
+  public async getRegisteredWorkerCount(): Promise<number> {
+    return this._worker ? 1 : 0;
+  }
+
   public async setWorkerAvailability(workerId: string, available: boolean): Promise<void> {
     this._available = available;
   }
@@ -289,6 +293,12 @@ export class DocWorkerMap implements IDocWorkerMap {
     }
   }
 
+  public async getRegisteredWorkerCount(): Promise<number> {
+    // scard, not smembers: this is asked on behalf of an installation that is told how many
+    // servers it runs and nothing further, so the ids are not fetched in the first place.
+    return await this._client.scardAsync("workers");
+  }
+
   public async getRegisteredWorkers(): Promise<DocWorkerRegistration[]> {
     // A stable order from one call to the next, with worker-2 ahead of worker-10.
     const byWorkerId = new Intl.Collator(undefined, { numeric: true });
@@ -379,7 +389,7 @@ export class DocWorkerMap implements IDocWorkerMap {
    * Note: This method should only be called by the worker.
    */
   public async setWorkerLoad(workerInfo: DocWorkerInfo, load: number): Promise<void> {
-    log.rawInfo("DocWorkerMap.setWorkerLoad", {
+    log.rawDebug("DocWorkerMap.setWorkerLoad", {
       workerId: workerInfo.id,
       load,
     });

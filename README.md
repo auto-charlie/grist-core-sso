@@ -436,7 +436,7 @@ Grist can be configured in many ways. Here are the main environment variables it
 | GRIST_ALLOW_AUTOMATIC_VERSION_CHECKING | Whether Grist is allowed to automatically check if a newer Grist version is available. Defaults to "true" on the default `grist` and `grist-ee` Docker images. Defaults false in `grist-oss` and everywhere else. |
 | GRIST_ALLOW_DEPRECATED_BARE_ORG_DELETE | If set, the deprecated DELETE /api/orgs/:orgId endpoint is available. |
 | GRIST_APP_ROOT | directory containing Grist sandbox and assets (specifically the sandbox and static subdirectories). |
-| GRIST_ATTACHMENT_THRESHOLD_MB | attachment storage limit per document beyond which Grist will recommend external storage (if available). Defaults to 50MB. |
+| GRIST_ATTACHMENTS_THRESHOLD_MB | attachment storage limit per document beyond which Grist will recommend external storage (if available). Defaults to 50MB. |
 | GRIST_BACKUP_DELAY_SECS | wait this long after a doc change before making a backup |
 | GRIST_BOOT_KEY | if set, use this key to sign in as the installation admin at `/boot`. New installs auto-generate one and print it on startup; set this only if you want a key of your own choosing. |
 | GRIST_BROADCAST_TIMEOUT_MS | Set the maximum time a web client has to accept a broadcast message about a document before being disconnected (default: 1 minute). |
@@ -483,7 +483,7 @@ Grist can be configured in many ways. Here are the main environment variables it
 | GRIST_SESSION_COOKIE | if set, overrides the name of Grist's cookie |
 | GRIST_SESSION_DOMAIN | if set, associates the cookie with the given domain - otherwise defaults to GRIST_DOMAIN |
 | GRIST_SESSION_SECRET | a key used to encode sessions |
-| GRIST_SQLITE_MODE | if set to `wal`, use SQLite in [WAL mode](https://www.sqlite.org/wal.html), if set to `sync`, use SQLite with [SYNCHRONOUS=full](https://www.sqlite.org/pragma.html#pragma_synchronous)
+| GRIST_SQLITE_MODE | if set to `wal`, use SQLite in [WAL mode](https://www.sqlite.org/wal.html), if set to `sync`, use SQLite with [SYNCHRONOUS=full](https://www.sqlite.org/pragma.html#pragma_synchronous), if set to `nosync` (the default), use SQLite with SYNCHRONOUS=off |
 | GRIST_ANON_PLAYGROUND | When set to `false` deny anonymous users access to the home page (but documents can still be shared to anonymous users). Defaults to `true`, unless GRIST_ORG_CREATION_ANYONE is `false`. |
 | GRIST_FORCE_LOGIN | Setting it to `true` is similar to setting `GRIST_ANON_PLAYGROUND: false` but it blocks any anonymous access (thus any document shared publicly actually requires the users to be authenticated before consulting them) |
 | GRIST_PERSONAL_ORGS | When set to `false` prevent new personal orgs from being created when a user signs up. Defaults to `true`, unless GRIST_ORG_CREATION_ANYONE is `false`. |
@@ -506,8 +506,9 @@ Grist can be configured in many ways. Here are the main environment variables it
 | GRIST_UNTRUSTED_PORT | if set, plugins will be served from the given port. This is an alternative to setting APP_UNTRUSTED_URL. |
 | GRIST_VACUUM_ON_CLOSE | When set to `false`, do not compact documents when they are closed for inactivity. Documents are only compacted when there is enough space to reclaim to be worth the cost of storing the result. Defaults to `true`. |
 | GRIST_WIDGET_LIST_URL | a url pointing to a widget manifest, by default https://github.com/gristlabs/grist-widget/releases/download/latest/manifest.json is used |
+| GRIST_LOG_LEVEL | Minimum level of log messages to output: `error`, `warn`, `info` or `debug`. Defaults to `info`. |
 | GRIST_LOG_HTTP | When set to `true`, log HTTP requests and responses information. Defaults to `false`. |
-| GRIST_LOG_HTTP_BODY | When this variable and `GRIST_LOG_HTTP` are set to `true` , log the body along with the HTTP requests. :warning: Be aware it may leak confidential information in the logs.:warning: Defaults to `false`. |
+| GRIST_LOG_HTTP_BODY | When set to `true`, log request bodies with API errors. If `GRIST_LOG_HTTP` is also `true`, log request bodies with all HTTP requests. :warning: Be aware it may leak confidential information in the logs.:warning: Defaults to `false`. |
 | GRIST_LOG_AS_JSON | When this variable is set to `true` or a truthy value, output log lines in JSON as opposed to a plain text format. |
 | GRIST_LOG_API_DETAILS | When this variable is set to `true` or a truthy value, log the API calls details. |
 | COOKIE_MAX_AGE | session cookie max age, defaults to 90 days; can be set to "none" to make it a session cookie |
