@@ -1203,7 +1203,10 @@ export class ActiveDoc extends EventEmitter {
     if (!this.docData) {
       throw new Error("No doc data");
     }
-    const attachments = this.docData.getMetaTable("_grist_Attachments").getRecords();
+    const usageChanges = await this.docStorage.scanAttachmentsForUsageChanges();
+    const usedNow = new Map(usageChanges.map(c => [c.id, c.used]));
+    const attachments = this.docData.getMetaTable("_grist_Attachments").getRecords()
+      .filter(attachment => usedNow.get(attachment.id) ?? !attachment.timeDeleted);
     const attachmentFileManager = this._attachmentFileManager;
     const doc = this;
 
@@ -1371,6 +1374,15 @@ export class ActiveDoc extends EventEmitter {
   // Check if user has rights to read everything in this doc.
   public async canCopyEverything(docSession: OptDocSession) {
     return this._granularAccess.canCopyEverything(docSession);
+  }
+
+  public async hasAccessRulesPermission(docSession: OptDocSession) {
+    return this._granularAccess.hasAccessRulesPermission(docSession);
+  }
+
+  // True if nothing in this doc would be censored for this user.
+  public async canReadEverything(docSession: OptDocSession) {
+    return this._granularAccess.canReadEverything(docSession);
   }
 
   // Check if it is appropriate for the user to be treated as an owner of
@@ -1951,6 +1963,7 @@ export class ActiveDoc extends EventEmitter {
     if (!userId) { throw new Error("creating access token requires a user"); }
     const token = await tokens.sign({
       readOnly: options.readOnly,
+      route: options.route,
       userId,  // definitely do not want userId overridable by options.
       docId,   // likewise for docId.
     });
@@ -1967,7 +1980,7 @@ export class ActiveDoc extends EventEmitter {
   /**
    * Check if an ACL formula is valid. If not, will throw an error with an explanation.
    */
-  public async checkAclFormula(docSession: DocSession, text: string): Promise<PredicateFormulaProperties> {
+  public async checkAclFormula(docSession: OptDocSession, text: string): Promise<PredicateFormulaProperties> {
     // Checks can leak names of tables and columns.
     if (await this._granularAccess.hasNuancedAccess(docSession)) { return {}; }
     await this.waitForInitialization();

@@ -26,11 +26,14 @@ import { IOAuthValidator } from "app/server/lib/IOAuthValidator";
 import { ISandbox, ISandboxCreationOptions } from "app/server/lib/ISandbox";
 import { IWebSocketProxy, IWebSocketProxyOptions } from "app/server/lib/IWebSocketProxy";
 import { createSandbox, SpawnFn } from "app/server/lib/NSandbox";
+import { getAppRoot } from "app/server/lib/places";
 import * as ProcessMonitor from "app/server/lib/ProcessMonitor";
 import { SqliteVariant } from "app/server/lib/SqliteCommon";
 import { ITelemetry } from "app/server/lib/Telemetry";
 
-import { Express } from "express";
+import * as path from "path";
+
+import { Application, Express } from "express";
 
 import type { SiteMetricsSource } from "app/gen-server/lib/Housekeeper";
 
@@ -100,6 +103,9 @@ export interface ICreate {
   // Return a string containing 1 or more HTML tags to insert into the head element of every
   // static page.
   getExtraHeadHtml?(): string;
+  // Directories with resource files (translations), in the order they are merged. The first one
+  // holds the core files; each later one adds or overrides keys.
+  getLocaleDirs(): string[];
   getAvailableStorageBackends(): StorageBackendName[];
   getStorageOptions?(name: string): ICreateStorageOptions | undefined;
   getAttachmentStoreOptions(): { [key: string]: ICreateAttachmentStoreOptions | undefined };
@@ -121,6 +127,7 @@ export interface ICreate {
   createDocNotificationManager(gristServer: GristServer): IDocNotificationManager | undefined;
   startProcessMonitor(telemetry: ITelemetry): StopCallback | undefined;
   createOAuthValidator(gristServer: GristServer): IOAuthValidator | undefined;
+  addOAuthMiddleware(app: Application, types: ("home" | "doc")[]): void;
   getWebSocketProxy?(gristServer: GristServer, options: IWebSocketProxyOptions): IWebSocketProxy | undefined;
 }
 
@@ -220,6 +227,10 @@ export class BaseCreate implements ICreate {
     return elements.join("\n");
   }
 
+  public getLocaleDirs() {
+    return [path.join(getAppRoot(), "assets", "locales")];
+  }
+
   public getAvailableStorageBackends() {
     return this._storage.map(s => s.name);
   }
@@ -282,6 +293,7 @@ export class BaseCreate implements ICreate {
   public getSiteMetricsSource(): SiteMetricsSource | undefined { return undefined; }
   public areAdminControlsAvailable(): boolean { return false; }
   public areOAuthAppsEnabled(): boolean { return false; }
+  public addOAuthMiddleware(app: Application, types: ("home" | "doc")[]) {}
   public createDocNotificationManager(gristServer: GristServer): IDocNotificationManager | undefined {
     return undefined;
   }
